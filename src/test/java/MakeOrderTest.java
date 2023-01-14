@@ -7,6 +7,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import ru.yandex.practicum.client.OrderClient;
+import ru.yandex.practicum.generator.OrderGenerator;
 import ru.yandex.practicum.pojo.*;
 import static io.restassured.RestAssured.given;
 import static org.apache.http.HttpStatus.SC_CREATED;
@@ -15,6 +17,7 @@ import static org.apache.http.HttpStatus.SC_CREATED;
 public class MakeOrderTest {
     private final Order order;
     private String track;
+    private OrderClient orderClient;
 
     public MakeOrderTest(Order order) {
         this.order = order;
@@ -22,6 +25,7 @@ public class MakeOrderTest {
 
     @Before
     public void setUp() {
+        orderClient = new OrderClient();
         RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru";
     }
 
@@ -45,10 +49,7 @@ public class MakeOrderTest {
     @Test
     @DisplayName("Create orders with different colours")
     public void createOrder() {
-        Response response = given()
-                .body(order)
-                .when()
-                .post("/api/v1/orders");
+        Response response = orderClient.createNewOrder(order);
 
         response.then()
                 .assertThat()

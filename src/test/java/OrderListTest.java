@@ -5,17 +5,20 @@ import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import ru.yandex.practicum.client.OrderClient;
 
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static org.apache.http.HttpStatus.SC_OK;
-import static ru.yandex.practicum.pojo.OrderGenerator.DEFAULT_LIMIT;
+import static ru.yandex.practicum.generator.OrderGenerator.DEFAULT_LIMIT;
 
 public class OrderListTest {
+    private OrderClient orderClient;
 
     @Before
     public void setUp() {
+        orderClient = new OrderClient();
         RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru";
     }
 
@@ -23,9 +26,7 @@ public class OrderListTest {
     @Test
     @DisplayName("Get oder list")
     public void getOrderList() {
-        Response response = given()
-                .queryParam("limit", DEFAULT_LIMIT)
-                .get("/api/v1/orders");
+        Response response = orderClient.listOrder();
         response.then()
                 .assertThat()
                 .statusCode(SC_OK)

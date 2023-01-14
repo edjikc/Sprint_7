@@ -7,9 +7,9 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import ru.yandex.practicum.pojo.Courier;
-import ru.yandex.practicum.pojo.CourierClient;
+import ru.yandex.practicum.client.CourierClient;
 import ru.yandex.practicum.pojo.CourierCredentials;
-import ru.yandex.practicum.pojo.CourierGenerator;
+import ru.yandex.practicum.generator.CourierGenerator;
 
 import static org.apache.http.HttpStatus.*;
 import static org.junit.Assert.assertEquals;
@@ -34,7 +34,7 @@ public class NewCourierTest {
     @Test
     @DisplayName("Create new courier")
     public void createNewCourier() {
-        ValidatableResponse response = courierClient.create(courier);
+        ValidatableResponse response = courierClient.createCourier(courier);
         ValidatableResponse loginResponse = courierClient.login(CourierCredentials.from(courier));
         response.assertThat()
                 .statusCode(SC_CREATED)
@@ -49,7 +49,7 @@ public class NewCourierTest {
     @DisplayName("Create identical couriers")
     public void courierAlreadyExists() {
         createNewCourier();
-        courierClient.create(courier)
+        courierClient.createCourier(courier)
                 //.assertThat()
                 .statusCode(SC_CONFLICT)
                 .body("message", Matchers.equalTo("Этот логин уже используется. Попробуйте другой."));
@@ -59,7 +59,7 @@ public class NewCourierTest {
     @DisplayName("Create courier with existing login")
     public void courierLoginAlreadyExists() {
         createNewCourier();
-        courierClient.create(CourierGenerator.getCourierWithName("asd"))
+        courierClient.createCourier(CourierGenerator.getCourierWithName("asd"))
                 .statusCode(SC_CONFLICT)
                 .body("message", Matchers.equalTo("Этот логин уже используется. Попробуйте другой."));
     }
@@ -67,7 +67,7 @@ public class NewCourierTest {
     @Test
     @DisplayName("Create courier no required field")
     public void courierInvalidField() {
-        ValidatableResponse response = courierClient.create(CourierGenerator.getInvalid());
+        ValidatableResponse response = courierClient.createCourier(CourierGenerator.getInvalid());
         response.assertThat()
                 .statusCode(SC_BAD_REQUEST)
                 .and()

@@ -1,4 +1,6 @@
-package ru.yandex.practicum.pojo;
+package ru.yandex.practicum.generator;
+
+import ru.yandex.practicum.pojo.Order;
 
 public class OrderGenerator {
     public static final int DEFAULT_LIMIT = 5;

@@ -7,9 +7,9 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import ru.yandex.practicum.pojo.Courier;
-import ru.yandex.practicum.pojo.CourierClient;
+import ru.yandex.practicum.client.CourierClient;
 import ru.yandex.practicum.pojo.CourierCredentials;
-import ru.yandex.practicum.pojo.CourierGenerator;
+import ru.yandex.practicum.generator.CourierGenerator;
 
 import static org.apache.http.HttpStatus.*;
 
@@ -34,7 +34,7 @@ public class CourierLoginTest {
     @Test
     @DisplayName("Courier authorization")
     public void loginCourier() {
-        courierClient.create(courier);
+        courierClient.createCourier(courier);
         ValidatableResponse loginResponse = courierClient.login(CourierCredentials.from(courier));
         loginResponse.assertThat()
                 .statusCode(SC_OK)
@@ -46,7 +46,7 @@ public class CourierLoginTest {
     @Test
     @DisplayName("Authorization with wrong login")
     public void invalidPassCourier() {
-        courierClient.create(courier);
+        courierClient.createCourier(courier);
         ValidatableResponse loginResponse = courierClient.login(CourierCredentials.from(CourierGenerator.getDefaultIncorrectPassword()));
         loginResponse.assertThat()
                 .statusCode(SC_NOT_FOUND)
