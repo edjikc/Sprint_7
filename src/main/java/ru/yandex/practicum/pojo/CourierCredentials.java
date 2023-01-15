@@ -30,4 +30,12 @@ public class CourierCredentials {
     public static CourierCredentials from (Courier courier) {
         return new CourierCredentials(courier.getLogin(), courier.getPassword());
     }
+
+    @Override
+    public String toString() {
+        return "CourierCredentials{" +
+                "login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }
